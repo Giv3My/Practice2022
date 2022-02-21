@@ -1,0 +1,8 @@
+.field {
+    display: flex;
+    flex-wrap: wrap;
+    width: 500px;
+    height: 500px;
+    justify-content: space-between;
+    margin: 100px auto;
+}
