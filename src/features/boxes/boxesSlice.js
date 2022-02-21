@@ -1,66 +1,73 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { STAGES } from '../constants';
+
+const initialState = {
+    squares: [
+        {
+            id: 0,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 1,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 2,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 3,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 4,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 5,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 6,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 7,
+            stage: STAGES.INIT,
+        },
+        {
+            id: 8,
+            stage: STAGES.INIT,
+        }
+    ],
+    buyError: false
+};
 
 export const boxesSlice = createSlice({
     name: 'boxes',
-    initialState: {
-        // color: "#1eeb77",
-        squares: [
-            {
-                id: 1,
-                stage: "init",
-            },
-            {
-                id: 2,
-                stage: "init",
-            },
-            {
-                id: 3,
-                stage: "init",
-            },
-            {
-                id: 4,
-                stage: "init",
-            },
-            {
-                id: 5,
-                stage: "init",
-            },
-            {
-                id: 6,
-                stage: "init",
-            },
-            {
-                id: 7,
-                stage: "init",
-            },
-            {
-                id: 8,
-                stage: "init",
-            },
-            {
-                id: 9,
-                stage: "init",
-            },
-        ]
-    },
+    initialState,
     reducers: {
-        changeStage: state => {
-            state.squares.stage = "waiting";
+        changeStageReserved: (state, action) => {
+            state.squares[action.payload].stage = STAGES.RESERVED;
         },
+        changeStageBought: (state, action) => {
+            const reservedSquares = state.squares.filter(square => square.stage === STAGES.RESERVED);
 
-        // increment: state => {
-        //   state.value += 1
-        // },
-        // decrement: state => {
-        //   state.value -= 1
-        // },
-        // incrementByAmount: (state, action) => {
-        //   state.value += action.payload
-        // }
+            if (action.payload === true)
+                reservedSquares.map(square => {
+                    square.stage = STAGES.BOUGHT;
+                });
+            else {
+                reservedSquares.map(square => {
+                    square.stage = STAGES.INIT;
+                });
+
+                state.buyError = true;
+            }
+        },
     }
 })
 
-// Action creators are generated for each case reducer function
-export const { changeStage } = boxesSlice.actions;
+export const { changeStageReserved, changeStageBought } = boxesSlice.actions;
 
 export default boxesSlice.reducer;
