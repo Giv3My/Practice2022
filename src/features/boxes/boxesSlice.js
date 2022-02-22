@@ -47,6 +47,9 @@ export const boxesSlice = createSlice({
     name: 'boxes',
     initialState,
     reducers: {
+        resetStage: (state, action) => {
+            state.squares[action.payload].stage = STAGES.INIT;
+        },
         changeStageReserved: (state, action) => {
             state.squares[action.payload].stage = STAGES.RESERVED;
         },
@@ -65,9 +68,12 @@ export const boxesSlice = createSlice({
                 state.buyError = true;
             }
         },
+        changeErrorState: (state, action) => {
+            state.buyError = action.payload;
+        }
     }
 })
 
-export const { changeStageReserved, changeStageBought } = boxesSlice.actions;
+export const { changeStageReserved, changeStageBought, changeErrorState, resetStage } = boxesSlice.actions;
 
 export default boxesSlice.reducer;
