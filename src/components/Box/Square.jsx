@@ -5,12 +5,12 @@ import { resetStage } from '../../features/boxes/boxesSlice';
 import { STAGES } from '../../features/constants';
 import { STAGE_COLORS } from '../../features/constants';
 import { useTimer } from 'use-timer';
-import "./Square.css";
+import './Square.css';
 
 function Square({ onStageChange, square }) {
   const dispatch = useDispatch();
 
-  const { id, stage } = square;
+  const { id, stage, timer } = square;
 
   const { time, start, reset } = useTimer({
     initialTime: 120,
@@ -21,10 +21,10 @@ function Square({ onStageChange, square }) {
     }
   });
 
-  useEffect(() => {
-    if (stage === STAGES.RESERVED)
-      dispatch(resetStage(id));
-  }, [])
+  // useEffect(() => {
+  //   if (stage === STAGES.RESERVED)
+  //     dispatch(resetStage(id));
+  // }, [])
 
   useEffect(() => {
     if (stage === STAGES.RESERVED)

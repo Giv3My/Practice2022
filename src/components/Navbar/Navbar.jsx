@@ -5,17 +5,21 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import './Navbar.css'
 
 function Navbar() {
+    const onLogoutClick = () => {
+        localStorage.removeItem("userToken");
+    }
+
     return (
         <div className="navbar">
             <ButtonGroup variant="outlined" aria-label="outlined primary button group">
-                <Link to='/'>
-                    <Button>Login</Button>
-                </Link>
                 <Link to='/'>
                     <Button>Home</Button>
                 </Link>
                 <Link to='/booking'>
                     <Button>Booking</Button>
+                </Link>
+                <Link to='/login'>
+                    <Button onClick={onLogoutClick} variant="contained">Logout</Button>
                 </Link>
             </ButtonGroup>
         </div>

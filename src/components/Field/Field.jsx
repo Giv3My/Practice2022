@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeStageReserved, changeStageBought, changeErrorState } from '../../features/boxes/boxesSlice';
-import { STAGES } from "../../features/constants";
-import Square from "../Box/Square";
+import { STAGES } from '../../features/constants';
+import Navbar from '../Navbar/Navbar';
+import Square from '../Box/Square';
 import Button from '@mui/material/Button';
-import "./Field.css";
+import './Field.css';
 
 function Field() {
     const squares = useSelector((state) => state.box.squares);
@@ -33,15 +34,18 @@ function Field() {
     const isAnyReserved = squares.some(square => square.stage === STAGES.RESERVED);
 
     return (
-        <div className="wrapper">
-            <div className="field">
-                {squares && squares.map(square => {
-                    return <Square square={square} onStageChange={handleStageChange} key={square.id} />
-                })}
+        <>
+            <Navbar />
+            <div className="wrapper field-wrapper">
+                <div className="field">
+                    {squares && squares.map(square => {
+                        return <Square square={square} onStageChange={handleStageChange} key={square.id} />
+                    })}
+                </div>
+                {isAnyReserved && <Button className="buy-btn" variant="contained" size="medium" onClick={onBuy}>Buy</Button>}
+                {error ? <p className="error">Недостаточно денег</p> : null}
             </div>
-            {isAnyReserved && <Button className="buy-btn" variant="contained" size="medium" onClick={onBuy}>Buy</Button>}
-            {error ? <p className="error">Недостаточно денег</p> : null}
-        </div>
+        </>
     );
 }
 
