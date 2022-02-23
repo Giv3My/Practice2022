@@ -1,11 +1,17 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import axios from 'axios';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import './Navbar.css'
 
 function Navbar() {
-    const onLogoutClick = () => {
+    const navigate = useNavigate();
+
+    const onLogoutClick = async () => {
+        await axios.post("http://localhost:3001/logout");
+
+        navigate("/login", { replace: true })
         localStorage.removeItem("userToken");
     }
 

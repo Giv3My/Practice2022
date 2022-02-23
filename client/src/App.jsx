@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import Field from './pages/Field/Field';
 import Navbar from './components/Navbar/Navbar';
-import Home from './components/Home/Home';
-import Field from './components/Field/Field';
-import Login from './components/Login/Login';
 import './App.css';
 
 function App() {

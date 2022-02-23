@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
 import { useDispatch } from 'react-redux';
 import { resetStage } from '../../features/boxes/boxesSlice';
 import { STAGES } from '../../features/constants';
 import { STAGE_COLORS } from '../../features/constants';
 import { useTimer } from 'use-timer';
+import Box from '@mui/material/Box';
 import './Square.css';
 
 function Square({ onStageChange, square }) {

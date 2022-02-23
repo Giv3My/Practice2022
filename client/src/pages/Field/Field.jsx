@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeStageReserved, changeStageBought, changeErrorState } from '../../features/boxes/boxesSlice';
 import { STAGES } from '../../features/constants';
-import Navbar from '../Navbar/Navbar';
-import Square from '../Box/Square';
+import Navbar from '../../components/Navbar/Navbar';
+import Square from '../../components/Square/Square';
 import Button from '@mui/material/Button';
 import './Field.css';
 

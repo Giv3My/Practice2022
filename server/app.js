@@ -4,10 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+const session = require('express-session');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var tokenRouter = require('./routes/token');
 var loginRouter = require('./routes/login');
+var logoutRouter = require('./routes/logout');
 
 var app = express();
 
@@ -15,16 +17,35 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors({
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: ['http://localhost:3000']
+}));
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 10000
+    },
+  })
+);
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/token', tokenRouter);
 app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

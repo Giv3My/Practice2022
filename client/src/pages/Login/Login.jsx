@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { isEmail } from 'validator';
-import md5 from 'md5';
 import axios from "axios";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -13,9 +11,13 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
 
     useEffect(() => {
-        setLoginError("");
+        setLoginError('');
+        setEmailError(false);
+        setPasswordError(false);
     }, [email, password])
 
     const onEmailChange = (e) => {
@@ -32,27 +34,20 @@ function Login() {
                 userEmail: email,
                 userPassword: password
             });
-            localStorage.setItem("userToken", data);
 
+            localStorage.setItem("userToken", data.token);
             navigate("/", { replace: true });
         } catch (err) {
-            if (err.response.status === 401)
+            if (err.response.status === 401) {
                 setLoginError('Invalid email or password');
-            else if (err.response.status === 402)
+                setEmailError(true);
+                setPasswordError(true);
+            }
+            else if (err.response.status === 406) {
                 setLoginError('Invalid email');
-            // console.log(err.response.status);
+                setEmailError(true);
+            }
         }
-
-        // await console.log(data.status);
-
-        // if (email && password) {
-        //     if (isEmail(email)) {
-        //         localStorage.setItem("userToken", md5(email));
-        //         navigate("/", { replace: true });
-        //     } else {
-        //         setLoginError('Invalid email');
-        //     }
-        // } else setLoginError('Invalid email or password');
     }
 
     return (
@@ -62,6 +57,7 @@ function Login() {
             <TextField
                 value={email}
                 onChange={onEmailChange}
+                error={emailError}
                 margin="normal"
                 required
                 id="email"
@@ -72,6 +68,7 @@ function Login() {
             <TextField
                 value={password}
                 onChange={onPasswordChange}
+                error={passwordError}
                 margin="normal"
                 required
                 name="password"

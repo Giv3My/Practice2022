@@ -3,31 +3,18 @@ const express = require('express'),
     { isEmail } = require('validator'),
     md5 = require('md5');
 
-// let token = "";
-
-// const generateToken = (data) => {
-//     const { userEmail } = data;
-
-//     return md5(userEmail);
-//     // localStorage.setItem("userToken", token);
-// }
-
-router.get('/', (req, res) => {
-    res.json(token);
-});
-
 router.post('/', (req, res) => {
-    const { userEmail, userPassword } = req.body;
+    const { userEmail: email, userPassword: password } = req.body;
 
-    if (userEmail && userPassword) {
-        if (isEmail(userEmail)) {
-            const token = md5(userEmail);
-            res.json(token);
+    if (email && password) {
+        if (isEmail(email)) {
+            req.session.token = md5(email);
+            res.send({ token: req.session.token });
         } else {
-            res.status(402).send();
+            res.sendStatus(406);
         }
     } else {
-        res.status(401).send();
+        res.sendStatus(401);
     }
 });
 
