@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isEmail } from 'validator';
+// import { isEmail } from 'validator';
 import md5 from 'md5';
+import axios from "axios";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import './Login.css';
@@ -25,15 +26,33 @@ function Login() {
         setPassword(e.target.value);
     }
 
-    const onLoginClick = () => {
-        if (email && password) {
-            if (isEmail(email)) {
-                localStorage.setItem("userToken", md5(email));
-                navigate("/", { replace: true });
-            } else {
+    const onLoginClick = async () => {
+        try {
+            const { data } = await axios.post("http://localhost:3001/login", {
+                userEmail: email,
+                userPassword: password
+            });
+            localStorage.setItem("userToken", data);
+
+            navigate("/", { replace: true });
+        } catch (err) {
+            if (err.response.status === 401)
+                setLoginError('Invalid email or password');
+            else if (err.response.status === 402)
                 setLoginError('Invalid email');
-            }
-        } else setLoginError('Invalid email or password');
+            // console.log(err.response.status);
+        }
+
+        // await console.log(data.status);
+
+        // if (email && password) {
+        //     if (isEmail(email)) {
+        //         localStorage.setItem("userToken", md5(email));
+        //         navigate("/", { replace: true });
+        //     } else {
+        //         setLoginError('Invalid email');
+        //     }
+        // } else setLoginError('Invalid email or password');
     }
 
     return (
