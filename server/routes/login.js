@@ -1,21 +1,25 @@
-const express = require('express'),
-    router = express.Router(),
-    { isEmail } = require('validator'),
-    md5 = require('md5');
+const router = require('express').Router();
+const jwt = require('jsonwebtoken');
+const md5 = require('md5');
+require('dotenv').config();
 
 router.post('/', (req, res) => {
-    const { userEmail: email, userPassword: password } = req.body;
+  const { email, password } = req.body;
 
-    if (email && password) {
-        if (isEmail(email)) {
-            req.session.token = md5(email);
-            res.send({ token: req.session.token });
-        } else {
-            res.sendStatus(406);
-        }
-    } else {
-        res.sendStatus(401);
-    }
+  if (email && password) {
+    const user = {
+      email,
+      password: md5(password)
+    };
+
+    const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, { expiresIn: 15 });
+    const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_SECRET, { expiresIn: 30 });
+
+    res.header('Authorization', accessToken);
+    res.cookie('refreshToken', refreshToken, { maxAge: 30 * 1000, httpOnly: true });
+
+    return res.sendStatus(200);
+  }
 });
 
 module.exports = router;

@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { resetStage } from '../../features/boxes/boxesSlice';
-import { STAGES } from '../../features/constants';
-import { STAGE_COLORS } from '../../features/constants';
 import { useTimer } from 'use-timer';
+
+import { resetStage } from '../../redux/slices/boxesSlice';
+
+import { STAGES, STAGE_COLORS } from '../../common/constants';
+
 import Box from '@mui/material/Box';
+
 import './Square.css';
 
 function Square({ onStageChange, square }) {
@@ -27,12 +30,13 @@ function Square({ onStageChange, square }) {
   // }, [])
 
   useEffect(() => {
-    if (stage === STAGES.RESERVED)
+    if (stage === STAGES.RESERVED) {
       start();
+    }
     else if (stage === STAGES.INIT || stage === STAGES.BOUGHT) {
       reset();
     }
-  }, [stage])
+  }, [stage]);
 
   const getStageColor = () => {
     switch (stage) {
@@ -45,13 +49,13 @@ function Square({ onStageChange, square }) {
       default:
         return STAGE_COLORS.INIT;
     }
-  }
+  };
 
   const handleStageChange = () => {
     if (stage === STAGES.INIT) {
       onStageChange(id);
     }
-  }
+  };
 
   const formatTime = (value) => {
     const sec = parseInt(value, 10);
@@ -63,7 +67,7 @@ function Square({ onStageChange, square }) {
     if (seconds < 10)
       seconds = "0" + seconds;
     return `${minutes}:${seconds}`;
-  }
+  };
 
   return (
     <Box
@@ -78,9 +82,12 @@ function Square({ onStageChange, square }) {
       }}
       onClick={handleStageChange}
     >
-      {stage === STAGES.RESERVED && <p>{formatTime(time)}</p>}
+      {stage === STAGES.RESERVED &&
+        <p>
+          {formatTime(time)}
+        </p>}
     </Box>
   );
-}
+};
 
 export default Square;

@@ -1,52 +1,74 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeStageReserved, changeStageBought, changeErrorState } from '../../features/boxes/boxesSlice';
-import { STAGES } from '../../features/constants';
-import Navbar from '../../components/Navbar/Navbar';
-import Square from '../../components/Square/Square';
+
+import { changeStageReserved, changeStageBought, changeErrorState } from '../../redux/slices/boxesSlice';
+
+import { Navbar, Square } from '../../components';
 import Button from '@mui/material/Button';
+
+import { STAGES } from '../../common/constants';
+
 import './Field.css';
 
 function Field() {
-    const squares = useSelector((state) => state.box.squares);
-    const error = useSelector((state) => state.box.buyError);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { squares, buyError: error } = useSelector(({ box }) => box);
 
-    useEffect(() => {
-        dispatch(changeErrorState(false));
-    }, [])
+  React.useEffect(() => {
+    dispatch(changeErrorState(false));
+  }, []);
 
-    const handleStageChange = (id) => {
-        if (error)
-            dispatch(changeErrorState(false));
-
-        dispatch(changeStageReserved(id));
+  const handleStageChange = (id) => {
+    if (error) {
+      dispatch(changeErrorState(false));
     }
 
-    const onBuy = () => {
-        const result = Boolean(Math.floor(Math.random() * 2));
+    dispatch(changeStageReserved(id));
+  };
 
-        setTimeout(() => {
-            dispatch(changeStageBought(result));
-        }, 500);
-    }
+  const onBuy = () => {
+    const result = Boolean(Math.floor(Math.random() * 2));
 
-    const isAnyReserved = squares.some(square => square.stage === STAGES.RESERVED);
+    setTimeout(() => {
+      dispatch(changeStageBought(result));
+    }, 500);
+  };
 
-    return (
-        <>
-            <Navbar />
-            <div className="wrapper field-wrapper">
-                <div className="field">
-                    {squares && squares.map(square => {
-                        return <Square square={square} onStageChange={handleStageChange} key={square.id} />
-                    })}
-                </div>
-                {isAnyReserved && <Button className="buy-btn" variant="contained" size="medium" onClick={onBuy}>Buy</Button>}
-                {error ? <p className="error">Недостаточно денег</p> : null}
-            </div>
-        </>
-    );
-}
+  const isAnyReserved = squares.some(square => square.stage === STAGES.RESERVED);
+
+  return (
+    <>
+      <Navbar />
+      <div className="wrapper field-wrapper">
+        <div className="field">
+          {squares &&
+            squares.map(square => {
+              return (
+                <Square
+                  square={square}
+                  onStageChange={handleStageChange}
+                  key={square.id}
+                />)
+            })}
+        </div>
+        {isAnyReserved &&
+          (<Button
+            className="buy-btn"
+            variant="contained"
+            size="medium"
+            onClick={onBuy}
+          >
+            Buy
+          </Button>)
+        }
+        {error &&
+          <p className="error">
+            Недостаточно денег
+          </p>
+        }
+      </div>
+    </>
+  )
+};
 
 export default Field;

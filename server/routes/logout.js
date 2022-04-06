@@ -1,12 +1,9 @@
-const session = require('express-session');
-
-const express = require('express'),
-    router = express.Router();
+const router = require('express').Router();
 
 router.post('/', (req, res) => {
-    req.session.destroy();
+  res.clearCookie('refreshToken');
 
-    res.sendStatus(200);
-})
+  return res.sendStatus(200);
+});
 
 module.exports = router;

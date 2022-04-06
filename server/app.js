@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-const session = require('express-session');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+// const session = require('express-session');
 
-var indexRouter = require('./routes/index');
-var tokenRouter = require('./routes/token');
-var loginRouter = require('./routes/login');
-var logoutRouter = require('./routes/logout');
+const indexRouter = require('./routes/index');
+const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
+const tokenRouter = require('./routes/token');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,27 +25,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors({
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin'],
+  exposedHeaders: 'Authorization',
   origin: ['http://localhost:3000']
 }));
 
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: false,
-      httpOnly: true,
-      maxAge: 10000
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: "keyboard cat",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: false,
+//       httpOnly: true,
+//       maxAge: 50000000
+//     },
+//   })
+// );
 
 app.use('/', indexRouter);
-app.use('/token', tokenRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
+app.use('/', tokenRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
