@@ -1,6 +1,9 @@
 import React from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
+
+import { setAuth } from '../../redux/slices/userSlice';
 
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -8,12 +11,14 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import './Navbar.css';
 
 function Navbar() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onLogoutClick = async () => {
     await axios.post('http://localhost:3001/logout');
 
     navigate('/login', { replace: true })
+    dispatch(setAuth(false));
     localStorage.removeItem('userToken');
   };
 
@@ -30,7 +35,8 @@ function Navbar() {
           <Button
             variant="contained"
             onClick={onLogoutClick}
-          >Logout
+          >
+            Logout
           </Button>
         </Link>
       </ButtonGroup>

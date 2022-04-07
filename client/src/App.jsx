@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import { ProtectedRoute } from './components';
@@ -21,7 +22,7 @@ function App() {
       <Route
         exact
         path='/login'
-        element={<ProtectedRoute authRequired={false} element={<Login />} />}
+        element={<Login />}
       />
     </Routes>
   );

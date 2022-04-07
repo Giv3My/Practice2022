@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 import { setAuth } from '../../redux/slices/userSlice';
 
@@ -9,10 +9,28 @@ import Button from '@mui/material/Button';
 
 function Home() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const checkAuth = async () => {
-    dispatch(setAuth());
+    const accessToken = localStorage.getItem('userToken');
+
+    try {
+      await axios.get('http://localhost:3001/accessToken', {
+        headers: {
+          Authorization: accessToken
+        }
+      });
+
+      dispatch(setAuth(true));
+    } catch (error) {
+      try {
+        const { headers } = await axios.get('http://localhost:3001/refreshToken');
+
+        localStorage.setItem('userToken', headers.authorization);
+      } catch (err) {
+        localStorage.removeItem('userToken');
+        dispatch(setAuth(false));
+      }
+    };
   };
 
   return (
