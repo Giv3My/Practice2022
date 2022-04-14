@@ -1,50 +1,49 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
+import AuthService from '../../services/AuthService';
 import { setAuth } from '../../redux/slices/userSlice';
 
 import { Navbar } from '../../components';
 import Button from '@mui/material/Button';
 
+import './Home.css';
+
 function Home() {
   const dispatch = useDispatch();
+  const { userInfo } = useSelector(({ user }) => user);
 
-  const checkAuth = async () => {
-    const accessToken = localStorage.getItem('userToken');
-
+  const handleTestButton = async () => {
     try {
-      await axios.get('http://localhost:3001/accessToken', {
-        headers: {
-          Authorization: accessToken
-        }
-      });
-
-      dispatch(setAuth(true));
-    } catch (error) {
-      try {
-        const { headers } = await axios.get('http://localhost:3001/refreshToken');
-
-        localStorage.setItem('userToken', headers.authorization);
-      } catch (err) {
-        localStorage.removeItem('userToken');
-        dispatch(setAuth(false));
-      }
-    };
+      await AuthService.accessToken();
+    } catch (err) {
+      dispatch(setAuth(false));
+      localStorage.removeItem('userToken');
+    }
   };
 
   return (
     <>
       <Navbar />
-      <div>Home page</div>
-      <Button
-        type="submit"
-        variant="contained"
-        sx={{ mt: 3 }}
-        onClick={checkAuth}
-      >
-        Test
-      </Button>
+      <div className="home-container">
+        <div className="home-wrapper">
+          <h1 className="home-title">Home page</h1>
+          <div className="user-info">
+            <p className="user-info-item">Username: {userInfo.username}</p>
+            <p className="user-info-item">Email: {userInfo.email}</p>
+            <p className="user-info-item">Role: {userInfo.role}</p>
+          </div>
+        </div>
+        <Button
+          className="test-button"
+          type="button"
+          variant="contained"
+          sx={{ mt: 3 }}
+          onClick={handleTestButton}
+        >
+          Check Auth
+        </Button>
+      </div>
     </>
   )
 };

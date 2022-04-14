@@ -1,0 +1,24 @@
+.home-container {
+  width: 500px;
+  margin: 0 auto;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-title {
+  padding-top: 50px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  justify-content: space-between;
+}
+
+.test-button {
+  align-self: center;
+}

@@ -6,7 +6,7 @@ import { changeStageReserved, changeStageBought, changeErrorState } from '../../
 import { Navbar, Square } from '../../components';
 import Button from '@mui/material/Button';
 
-import { STAGES } from '../../common/constants';
+import { STAGES } from '../../common/constants/squareConstants';
 
 import './Field.css';
 
@@ -39,8 +39,8 @@ function Field() {
   return (
     <>
       <Navbar />
-      <div className="wrapper field-wrapper">
-        <div className="field">
+      <div className="field-container">
+        <div className="field-wrapper">
           {squares &&
             squares.map(square => {
               return (

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { STAGES } from '../../common/constants';
+import { STAGES } from '../../common/constants/squareConstants';
 
 const initialState = {
   squares: [

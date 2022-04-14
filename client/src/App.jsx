@@ -9,21 +9,9 @@ import './App.css';
 function App() {
   return (
     <Routes>
-      <Route
-        exact
-        path='/'
-        element={<ProtectedRoute authRequired={true} element={<Home />} />}
-      />
-      <Route
-        exact
-        path='/booking'
-        element={<ProtectedRoute authRequired={true} element={<Field />} />}
-      />
-      <Route
-        exact
-        path='/login'
-        element={<Login />}
-      />
+      <Route exact path='/' element={<ProtectedRoute element={<Home />} />} />
+      <Route exact path='/booking' element={<ProtectedRoute element={<Field />} />} />
+      <Route exact path='/login' element={<Login />} />
     </Routes>
   );
 }

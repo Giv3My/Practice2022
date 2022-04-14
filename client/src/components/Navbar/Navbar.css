@@ -1,17 +1,5 @@
-a {
-    text-decoration: none;
-}
-
 .navbar {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-a:first-child {
-    margin-right: 20px;
-}
-
-a:last-child {
-    margin-left: 20px;
+    width: 500px;
+    margin: 0 auto;
+    padding-top: 20px;
 }

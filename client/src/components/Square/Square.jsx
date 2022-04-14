@@ -4,16 +4,14 @@ import { useTimer } from 'use-timer';
 
 import { resetStage } from '../../redux/slices/boxesSlice';
 
-import { STAGES, STAGE_COLORS } from '../../common/constants';
+import { STAGES, STAGE_COLORS } from '../../common/constants/squareConstants';
 
 import Box from '@mui/material/Box';
-
-import './Square.css';
 
 function Square({ onStageChange, square }) {
   const dispatch = useDispatch();
 
-  const { id, stage, timer } = square;
+  const { id, stage } = square;
 
   const { time, start, reset } = useTimer({
     initialTime: 120,
@@ -69,17 +67,23 @@ function Square({ onStageChange, square }) {
     return `${minutes}:${seconds}`;
   };
 
+  const squareStyle = {
+    width: '150px',
+    height: '150px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: getStageColor(),
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: [0.9, 0.8, 0.7],
+    },
+  };
+
   return (
     <Box
       className='square'
-      sx={{
-        width: 150,
-        height: 150,
-        backgroundColor: getStageColor(),
-        '&:hover': {
-          opacity: [0.9, 0.8, 0.7],
-        },
-      }}
+      sx={squareStyle}
       onClick={handleStageChange}
     >
       {stage === STAGES.RESERVED &&
