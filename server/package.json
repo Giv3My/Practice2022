@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "server": "nodemon ./bin/www",
+    "seeds": "node ./seeds.js",
+    "start": "npm run seeds & npm run server"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",

@@ -7,8 +7,8 @@ class UserController {
 
       const userData = await userService.login(email, password);
 
-      res.header('Authorization', userData.accessToken);
-      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 1000, httpOnly: true });
+      res.header('Authorization', userData.tokens.accessToken);
+      res.cookie('refreshToken', userData.tokens.refreshToken, { maxAge: 30 * 1000, httpOnly: true });
 
       return res.send(userData);
     } catch (e) {

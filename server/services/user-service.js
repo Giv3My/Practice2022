@@ -12,7 +12,7 @@ class UserService {
         throw new Error('Incorrect email');
       }
 
-      if (user.password !== password) {
+      if (md5(password) !== user.password) {
         throw new Error('Incorrect password');
       }
 
@@ -26,8 +26,10 @@ class UserService {
 
       return {
         user: userDto,
-        ...tokens
+        tokens
       };
+    } else {
+      throw new Error('Incorrect email or password');
     }
   };
 
