@@ -1,6 +1,21 @@
 const userService = require('../services/user-service')
 
 class UserController {
+  async registration(req, res) {
+    try {
+      const { email } = req.body;
+
+      const userData = await userService.registration(email);
+
+      res.header('Authorization', userData.tokens.accessToken);
+      res.cookie('refreshToken', userData.tokens.refreshToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+
+      return res.send(userData);
+    } catch (e) {
+      return res.status(400).send(e.message);
+    }
+  };
+
   async login(req, res) {
     try {
       const { email, password } = req.body;
@@ -8,7 +23,7 @@ class UserController {
       const userData = await userService.login(email, password);
 
       res.header('Authorization', userData.tokens.accessToken);
-      res.cookie('refreshToken', userData.tokens.refreshToken, { maxAge: 30 * 1000, httpOnly: true });
+      res.cookie('refreshToken', userData.tokens.refreshToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
       return res.send(userData);
     } catch (e) {
@@ -48,9 +63,20 @@ class UserController {
       const tokens = await userService.refresh(refreshToken);
 
       res.header('Authorization', tokens.accessToken);
-      res.cookie('refreshToken', tokens.refreshToken, { maxAge: 30 * 1000, httpOnly: true });
+      res.cookie('refreshToken', tokens.refreshToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
       return res.send(tokens);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  async getUsers(req, res) {
+    try {
+      const userIds = req.body;
+      const users = await userService.getActiveUsers(userIds);
+
+      return res.send(users);
     } catch (e) {
       console.log(e);
     }

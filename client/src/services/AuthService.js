@@ -1,9 +1,13 @@
 import axios from 'axios';
 
 import api from '../common/api';
-import { API_URL } from './../common/api/index';
+import { API_URL } from './../common/api';
 
 class AuthService {
+  static async registration(values) {
+    return axios.post(`${API_URL}/registration`, values);
+  };
+
   static async login(values) {
     return axios.post(`${API_URL}/login`, values);
   };

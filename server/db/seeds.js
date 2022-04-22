@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const UserModel = require('./models/user-model');
+const UserModel = require('../models/user-model');
 require('dotenv').config();
 
 mongoose.connect(process.env.DB_URL, {
@@ -27,6 +27,12 @@ const seedUsers = [
 ];
 
 const seedDB = async () => {
+  const data = await UserModel.find();
+
+  if (data.length) {
+    return;
+  }
+
   await UserModel.deleteMany({});
   await UserModel.insertMany(seedUsers);
 };
