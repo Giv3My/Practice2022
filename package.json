@@ -1,0 +1,24 @@
+{
+  "name": "booking-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run start-server\" \"npm run start-client\"",
+    "start-server": "cd server & npm run start",
+    "start-client": "cd client & npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giv3My/Practice2022.git"
+  },
+  "author": "Vlad Bessmertnykh <bessvlad45@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Giv3My/Practice2022/issues"
+  },
+  "homepage": "https://github.com/Giv3My/Practice2022#readme"
+}
