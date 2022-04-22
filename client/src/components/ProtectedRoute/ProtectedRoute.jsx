@@ -1,12 +1,11 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import { checkAuth } from '../../redux/slices/userSlice';
+import { checkAuth } from '../../redux/slices/authSlice';
 
-function ProtectedRoute({ element: Component }) {
+function ProtectedRoute({ isAuth, allowedRoles, userRole }) {
   const dispatch = useDispatch();
-  const { isAuth } = useSelector(({ user }) => user);
 
   React.useEffect(() => {
     if (localStorage.getItem('userToken')) {
@@ -14,7 +13,13 @@ function ProtectedRoute({ element: Component }) {
     }
   }, []);
 
-  return isAuth ? Component : <Navigate to='/login' replace />;
-}
+  return (
+    allowedRoles.includes(userRole) ?
+      <Outlet /> :
+      isAuth ?
+        <Navigate to='/' replace /> :
+        <Navigate to='/login' replace />
+  )
+};
 
 export default ProtectedRoute;

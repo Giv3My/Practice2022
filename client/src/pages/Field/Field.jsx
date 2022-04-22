@@ -1,73 +1,96 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { changeStageReserved, changeStageBought, changeErrorState } from '../../redux/slices/boxesSlice';
+import { changeStageReserved, changeStageBought } from '../../redux/slices/boxesSlice';
+import { setModalOpen } from '../../redux/slices/modalSlice';
 
-import { Navbar, Square } from '../../components';
+import { Square } from '../../components';
 import Button from '@mui/material/Button';
 
+import useActiveUsers from '../../common/hooks/useActiveUsers';
+import { role } from '../../common/constants/roles';
 import { STAGES } from '../../common/constants/squareConstants';
 
 import './Field.css';
 
-function Field() {
+function Field({ isAuth, currentUserId }) {
   const dispatch = useDispatch();
-  const { squares, buyError: error } = useSelector(({ box }) => box);
+  const { squares } = useSelector(({ box }) => box);
+  const { userInfo, usersWhoBooked } = useSelector(({ user }) => user);
 
-  React.useEffect(() => {
-    dispatch(changeErrorState(false));
-  }, []);
+  const [error, setError] = React.useState(false);
+
+  useActiveUsers();
 
   const handleStageChange = (id) => {
-    if (error) {
-      dispatch(changeErrorState(false));
+    if (userInfo?.role === role.admin) {
+      return;
     }
 
-    dispatch(changeStageReserved(id));
+    error && setError(false);
+
+    if (!isAuth) {
+      dispatch(setModalOpen(true));
+    } else {
+      dispatch(changeStageReserved({ id, userId: currentUserId }));
+    }
   };
 
-  const onBuy = () => {
+  const onBuy = async () => {
     const result = Boolean(Math.floor(Math.random() * 2));
 
-    setTimeout(() => {
+    const buyPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (result) {
+          resolve();
+        } else {
+          reject();
+        }
+      }, 500);
+    });
+
+    try {
+      await buyPromise;
       dispatch(changeStageBought(result));
-    }, 500);
+    } catch (err) {
+      dispatch(changeStageBought(result));
+      setError(true);
+    }
   };
 
   const isAnyReserved = squares.some(square => square.stage === STAGES.RESERVED);
 
   return (
-    <>
-      <Navbar />
-      <div className="field-container">
-        <div className="field-wrapper">
-          {squares &&
-            squares.map(square => {
-              return (
-                <Square
-                  square={square}
-                  onStageChange={handleStageChange}
-                  key={square.id}
-                />)
-            })}
-        </div>
-        {isAnyReserved &&
-          (<Button
-            className="buy-btn"
-            variant="contained"
-            size="medium"
-            onClick={onBuy}
-          >
-            Buy
-          </Button>)
-        }
-        {error &&
-          <p className="error">
-            Недостаточно денег
-          </p>
-        }
+    <div className="field-container">
+      <div className="field-wrapper">
+        {squares &&
+          squares.map(square => {
+            return (
+              <Square
+                key={square.id}
+                square={square}
+                user={userInfo}
+                usersWhoBooked={usersWhoBooked}
+                onStageChange={handleStageChange}
+              />)
+          })}
       </div>
-    </>
+      {isAnyReserved && (
+        <Button
+          className="buy-btn"
+          variant="contained"
+          size="medium"
+          onClick={onBuy}
+        >
+          Buy
+        </Button>
+      )}
+      {error && (
+        <p className="error">
+          Недостаточно денег
+        </p>
+      )}
+    </div>
   )
 };
 

@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { validationLoginSchema } from '../../common/constants/validation/schemas';
+import validateFormValues from '../../common/helpers/validateForm';
+
 import { Form, Field } from 'react-final-form';
 import { TextField, Button } from '@mui/material';
 
-import validationSchema from './../../common/constants/validationSchema';
-import validateFormValues from './../../common/helpers/validateForm';
-
 function LoginForm({ onFormSubmit, emailError, passwordError }) {
-	const validate = validateFormValues(validationSchema);
+	const validate = validateFormValues(validationLoginSchema);
 
 	return (
 		<Form

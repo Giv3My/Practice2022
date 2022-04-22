@@ -1,0 +1,21 @@
+.admin-container {
+  padding-top: 70px;
+}
+
+.admin-title {
+  text-align: center;
+}
+
+.user-list {
+  margin: 30px auto 0;
+}
+
+.user-list-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.username,
+.user-booked-places {
+  font-size: 24px;
+}

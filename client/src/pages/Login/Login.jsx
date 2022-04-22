@@ -1,18 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { login } from '../../redux/slices/userSlice';
+import { login } from '../../redux/slices/authSlice';
 
 import { FORM_ERROR } from 'final-form';
 import { LoginForm } from '../../components';
 
 import './Login.css';
 
-function Login() {
+function Login({ isAuth }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuth } = useSelector(({ user }) => user);
 
   const [emailError, setEmailError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
@@ -41,7 +40,7 @@ function Login() {
           return { [FORM_ERROR]: 'Incorrect password' }
         default:
           break;
-      }
+      };
     }
   };
 

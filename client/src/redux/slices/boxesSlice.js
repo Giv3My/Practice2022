@@ -7,71 +7,104 @@ const initialState = {
     {
       id: 0,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 1,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 2,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 3,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 4,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 5,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 6,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 7,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     },
     {
       id: 8,
       stage: STAGES.INIT,
+      timer: null,
+      userId: ''
     }
-  ],
-  buyError: false
+  ]
 };
 
 export const boxesSlice = createSlice({
   name: 'boxes',
   initialState,
   reducers: {
-    resetStage: (state, action) => {
-      state.squares[action.payload].stage = STAGES.INIT;
+    resetStage: (state, { payload }) => {
+      state.squares[payload].stage = STAGES.INIT;
+      state.squares[payload].timer = null;
     },
-    changeStageReserved: (state, action) => {
-      state.squares[action.payload].stage = STAGES.RESERVED;
+    updateTime: (state, { payload }) => {
+      state.squares[payload.id].timer = payload.time;
     },
-    changeStageBought: (state, action) => {
+    changeStageReserved: (state, { payload }) => {
+      state.squares[payload.id].stage = STAGES.RESERVED;
+      state.squares[payload.id].userId = payload.userId;
+    },
+    changeStageBought: (state, { payload }) => {
       const reservedSquares = state.squares.filter(square => square.stage === STAGES.RESERVED);
 
-      if (action.payload === true) {
-        reservedSquares.map(square => square.stage = STAGES.BOUGHT);
-      }
-      else {
-        reservedSquares.map(square => square.stage = STAGES.INIT);
+      reservedSquares.map(square => square.timer = null);
 
-        state.buyError = true;
+      if (payload === true) {
+        reservedSquares.map(square => square.stage = STAGES.BOUGHT);
+      } else {
+        reservedSquares.map(square => {
+          square.stage = STAGES.INIT;
+          square.userId = '';
+        });
       }
     },
-    changeErrorState: (state, action) => {
-      state.buyError = action.payload;
+    resetReservedSquares: (state) => {
+      const reservedSquares = state.squares.filter(square => square.stage === STAGES.RESERVED);
+
+      reservedSquares.map(square => {
+        square.stage = STAGES.INIT;
+        square.timer = null;
+        square.userId = '';
+      });
+    },
+    resetSquares: (state) => {
+      state.squares = initialState.squares;
     }
   }
 });
 
-export const { changeStageReserved, changeStageBought, changeErrorState, resetStage } = boxesSlice.actions;
+export const { resetStage, updateTime, changeStageReserved, changeStageBought, resetReservedSquares, resetSquares } = boxesSlice.actions;
 
 export default boxesSlice.reducer;
